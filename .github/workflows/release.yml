@@ -88,6 +88,7 @@ jobs:
 
         patch -p1 -i ../patches/opencv-${{ env.opencv-version }}-no-gpu.patch
 
+        sed -i 's/cv::UMat/cv::Mat/g' modules/calib3d/src/chessboard.cpp
 
         patch -p1 -i ../patches/opencv-${{ env.opencv-version }}-no-zlib.patch
         patch -p1 -i ../patches/opencv-${{ env.opencv-version }}-link-openmp.patch
