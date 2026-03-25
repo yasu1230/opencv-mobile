@@ -88,7 +88,7 @@ jobs:
 
         patch -p1 -i ../patches/opencv-${{ env.opencv-version }}-no-gpu.patch
 
-        patch -p1 -i ../patches/opencv-${{ env.opencv-version }}-no-rtti.patch
+
         patch -p1 -i ../patches/opencv-${{ env.opencv-version }}-no-zlib.patch
         patch -p1 -i ../patches/opencv-${{ env.opencv-version }}-link-openmp.patch
         patch -p1 -i ../patches/opencv-${{ env.opencv-version }}-fix-windows-arm-arch.patch
@@ -130,7 +130,7 @@ jobs:
         -DANDROID_USE_LEGACY_TOOLCHAIN_FILE=False \
         -DANDROID_PLATFORM=android-21 \
         -DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON \
-        -DANDROID_CPP_FEATURES="no-rtti" \
+        -DANDROID_CPP_FEATURES="" \
         -DCMAKE_INSTALL_PREFIX=install \
         -DCMAKE_BUILD_TYPE=Release \
     steps:
@@ -202,8 +202,8 @@ jobs:
         -DENABLE_BITCODE=$ENABLE_BITCODE \
         -DENABLE_ARC=$ENABLE_ARC \
         -DENABLE_VISIBILITY=$ENABLE_VISIBILITY \
-        -DCMAKE_C_FLAGS="-fno-rtti" \
-        -DCMAKE_CXX_FLAGS="-fno-rtti" \
+        -DCMAKE_C_FLAGS="" \
+        -DCMAKE_CXX_FLAGS="" \
         -DCMAKE_INSTALL_PREFIX=install \
         -DCMAKE_BUILD_TYPE=Release \
     steps:
@@ -272,8 +272,8 @@ jobs:
         -DENABLE_BITCODE=$ENABLE_BITCODE \
         -DENABLE_ARC=$ENABLE_ARC \
         -DENABLE_VISIBILITY=$ENABLE_VISIBILITY \
-        -DCMAKE_C_FLAGS="-fno-rtti" \
-        -DCMAKE_CXX_FLAGS="-fno-rtti" \
+        -DCMAKE_C_FLAGS="" \
+        -DCMAKE_CXX_FLAGS="" \
         -DCMAKE_INSTALL_PREFIX=install \
         -DCMAKE_BUILD_TYPE=Release \
     steps:
