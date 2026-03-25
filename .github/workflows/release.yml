@@ -29,13 +29,19 @@ jobs:
     - name: get-version
       id: get_version
       run: echo "VERSION=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
+    - name: cache-opencv-source
+      uses: actions/cache@v4
+      with:
+        path: opencv-4.13.0.zip
+        key: opencv-source-4.13.0
     - name: opencv4-source
       env:
         opencv-version: 4.13.0
       run: |
-        wget -q https://github.com/opencv/opencv/archive/${{ env.opencv-version }}.zip -O opencv-${{ env.opencv-version }}.zip
+        if [ ! -f opencv-${{ env.opencv-version }}.zip ]; then
+          wget -q https://github.com/opencv/opencv/archive/${{ env.opencv-version }}.zip -O opencv-${{ env.opencv-version }}.zip
+        fi
         unzip -q opencv-${{ env.opencv-version }}.zip
-        rm opencv-${{ env.opencv-version }}.zip
         cd opencv-${{ env.opencv-version }}
         truncate -s 0 cmake/OpenCVFindLibsGrfmt.cmake
         rm -rf modules/gapi
