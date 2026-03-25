@@ -1,9 +1,6 @@
 name: release
 # on: pull_request
 on:
-  push:
-    tags:
-      - '*'
   workflow_dispatch:
 
 env:
@@ -213,16 +210,13 @@ jobs:
         unzip -q opencv-mobile-${{ matrix.opencv-version }}.zip
         echo "SOURCE_DIR=opencv-mobile-${{ matrix.opencv-version }}" >> $GITHUB_ENV
         echo "PACKAGE_NAME=opencv-mobile-${{ matrix.opencv-version }}-ios" >> $GITHUB_ENV
-        # workaround ar @list issue on macos
-        sed -i -e 's!\\"${objpath4}\\"!${objpath4}!g' ${{ env.SOURCE_DIR }}/modules/world/CMakeLists.txt
     - name: build-arm64
       run: |
         cd ${{ env.SOURCE_DIR }}
         mkdir build-arm64 && cd build-arm64
         cmake ${{ env.COMMON_CMAKE_OPTIONS }} -DARCHS="arm64" \
             `cat ../options.txt` -DBUILD_opencv_world=ON -DOPENCV_DISABLE_FILESYSTEM_SUPPORT=ON ..
-        # workaround ar @list issue on macos
-        cmake --build . -j 4 || { cd modules/world; $DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc ../../lib/libopencv_world.a `cat world_objects.rsp` CMakeFiles/opencv_world.dir/src/world_init.cpp.o; cd ../..; }
+        cmake --build . -j 4
         cmake --build . --target install
     - name: merge-opencv4-3rdparty
       run: |
@@ -286,16 +280,13 @@ jobs:
         unzip -q opencv-mobile-${{ matrix.opencv-version }}.zip
         echo "SOURCE_DIR=opencv-mobile-${{ matrix.opencv-version }}" >> $GITHUB_ENV
         echo "PACKAGE_NAME=opencv-mobile-${{ matrix.opencv-version }}-ios-simulator" >> $GITHUB_ENV
-        # workaround ar @list issue on macos
-        sed -i -e 's!\\"${objpath4}\\"!${objpath4}!g' ${{ env.SOURCE_DIR }}/modules/world/CMakeLists.txt
     - name: build-x86_64
       run: |
         cd ${{ env.SOURCE_DIR }}
         mkdir build-x86_64 && cd build-x86_64
         cmake ${{ env.COMMON_CMAKE_OPTIONS }} -DARCHS="x86_64" \
             `cat ../options.txt` -DBUILD_opencv_world=ON -DOPENCV_DISABLE_FILESYSTEM_SUPPORT=ON ..
-        # workaround ar @list issue on macos
-        cmake --build . -j 4 || { cd modules/world; $DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc ../../lib/libopencv_world.a `cat world_objects.rsp` CMakeFiles/opencv_world.dir/src/world_init.cpp.o; cd ../..; }
+        cmake --build . -j 4
         cmake --build . --target install
     - name: build-arm64
       run: |
@@ -303,8 +294,7 @@ jobs:
         mkdir build-arm64 && cd build-arm64
         cmake ${{ env.COMMON_CMAKE_OPTIONS }} -DARCHS="arm64" \
             `cat ../options.txt` -DBUILD_opencv_world=ON -DOPENCV_DISABLE_FILESYSTEM_SUPPORT=ON ..
-        # workaround ar @list issue on macos
-        cmake --build . -j 4 || { cd modules/world; $DEVELOPER_DIR/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc ../../lib/libopencv_world.a `cat world_objects.rsp` CMakeFiles/opencv_world.dir/src/world_init.cpp.o; cd ../..; }
+        cmake --build . -j 4
         cmake --build . --target install
     - name: merge-opencv4-3rdparty
       run: |
